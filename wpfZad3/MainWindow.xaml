@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wpfZad3"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" FontSize="16">
+        Title="MainWindow" Height="500" Width="800" FontSize="16">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Nakład" VerticalAlignment="Center" Margin="3"/>
-            <TextBox Grid.Column="1" VerticalAlignment="Center" Margin="3"/>
+            <TextBox Grid.Column="1" Name="amount" VerticalAlignment="Center" Margin="3" TextChanged="Amount_TextChanged"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -31,49 +31,63 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"  Content="Format" VerticalAlignment="Center" Margin="3"/>
-            <Slider Grid.Column="1" Maximum="5" Minimum="0" VerticalAlignment="Center" Margin="3" IsSnapToTickEnabled="True"/>
-            <Label Grid.Column="2" Content="A5 - cena 20gr/szt." VerticalAlignment="Center" Margin="3"/>
+            <Slider Grid.Column="1" Maximum="5" Minimum="0" Name="format" VerticalAlignment="Center" Margin="3" ValueChanged="format_ValueChanged" IsSnapToTickEnabled="True"/>
+            <Label Grid.Column="2" Content="A4 - cena 50gr/szt." Name="paperSize" VerticalAlignment="Center" Margin="3"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <CheckBox Grid.Column="0" Content="Kolorowy papier - cena +50%" VerticalAlignment="Center" Margin="3"/>
-            <ComboBox Grid.Column="1" Margin="3" VerticalAlignment="Center">
-                <ComboBoxItem>Żółty</ComboBoxItem>
-                <ComboBoxItem>Zielony</ComboBoxItem>
-                <ComboBoxItem>Niebieski</ComboBoxItem>
-                <ComboBoxItem>Czerwony</ComboBoxItem>
+            <CheckBox Grid.Column="0" Content="Kolorowy papier - cena +50%" Name="colorPaper" IsChecked="False" Click="colorPaper_Click" VerticalAlignment="Center" Margin="3"/>
+            <ComboBox Grid.Column="1" Margin="3" Name="colorPicker" SelectionChanged="colorPicker_SelectionChanged" IsEnabled="False" VerticalAlignment="Center">
+                <ComboBoxItem Name="yellow">Żółty</ComboBoxItem>
+                <ComboBoxItem Name="green">Zielony</ComboBoxItem>
+                <ComboBoxItem Name="blue">Niebieski</ComboBoxItem>
+                <ComboBoxItem Name="red">Czerwony</ComboBoxItem>
             </ComboBox>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <GroupBox Grid.Column="0" Header="Gramatura" Margin="3">
-                <StackPanel Orientation="Vertical" Margin="3">
-                    <RadioButton Content="80 g/m²" Margin="3"/>
-                    <RadioButton Content="120 g/m² - cena x2" Margin="3"/>
-                    <RadioButton Content="200 g/m² - cena x2,5" Margin="3"/>
-                    <RadioButton Content="240 g/m² - cena x3" Margin="3"/>
+                <StackPanel Orientation="Vertical" Name="gramatura" Margin="3">
+                    <RadioButton Content="80 g/m²" Name="gr80" Click="gr_Click" Margin="3"/>
+                    <RadioButton Content="120 g/m² - cena x2" Name="gr120" Click="gr_Click" IsChecked="True" Margin="3"/>
+                    <RadioButton Content="200 g/m² - cena x2,5" Name="gr200" Click="gr_Click" Margin="3"/>
+                    <RadioButton Content="240 g/m² - cena x3" Name="gr240" Click="gr_Click" Margin="3"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Grid.Column="1" Header="Opcje Wydruku" Margin="3">
                 <StackPanel Orientation="Vertical" Margin="3">
-                    <CheckBox Content="druk w kolorze - cena +30%" Margin="3"/>
-                    <CheckBox Content="druk dwustronny - cena +50%" Margin="3"/>
-                    <CheckBox Content="lakier UV - cena +20%" Margin="3"/>
+                    <CheckBox Content="druk w kolorze - cena +30%" Name="colorPrint" Click="gr_Click" IsChecked="True" Margin="3"/>
+                    <CheckBox Content="druk dwustronny - cena +50%" Name="twoSides" Click="gr_Click" IsChecked="False" Margin="3"/>
+                    <CheckBox Content="lakier UV - cena +20%" Name="UV" Click="gr_Click" IsChecked="False" Margin="3"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Grid.Column="2" Header="Termin realizacji" Margin="3">
                 <StackPanel Orientation="Vertical" Margin="3">
-                    <RadioButton Content="Standard" IsChecked="True" Margin="3"/>
-                    <RadioButton Content="Ekspres - cena +15zl" Margin="3"/>
+                    <RadioButton Content="Standard" IsChecked="True" Name="standard" Click="gr_Click" Margin="3"/>
+                    <RadioButton Content="Ekspres - cena +15zl" IsChecked="False" Click="gr_Click" Name="express" Margin="3"/>
                 </StackPanel>
             </GroupBox>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Label Content="Podsumowanie zamówienia" VerticalAlignment="Center" Margin="3" FontWeight="Bold"/>
+        </Grid>
+        <Grid Grid.Row="5">
+            <TextBox Margin="3" Name="finalText" IsEnabled="False"/>
+        </Grid>
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="OK" VerticalAlignment="Center" HorizontalAlignment="Right" Click="Button_OK_Click" Margin="3" Padding="25, 8" BorderBrush="LightBlue"/>
+            <Button Grid.Column="1" Content="Anuluj" VerticalAlignment="Center" Click="Button_Click" HorizontalAlignment="Right" Margin="3" Padding="25, 8"/>
         </Grid>
     </Grid>
 </Window>
